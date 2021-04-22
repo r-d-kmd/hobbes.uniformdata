@@ -17,21 +17,20 @@ ENV FEED_USER ${FEED_USER_ARG}
 ENV FEED_PASSWORD ${FEED_PASSWORD_ARG}
 RUN if [ -n "$FEED_PAT" ]; then export FEED_USER="$FEED_PAT"; export FEED_PASSWORD="$FEED_PAT"; fi
 
-#COPY ./common/hobbes.messaging/src/Broker.fs /source/Broker.fs
+ARG MAJOR_ARG=0
+ARG MINOR_ARG=0
+ARG BUILD_VERSION_ARG=1
+
+ENV MAJOR=${MAJOR_ARG}
+ENV MINOR=${MINOR_ARG}
+ENV BUILD_VERSION=${BUILD_VERSION_ARG}
+
 COPY ./src /source
 WORKDIR /source
 
 RUN echo "dotnet \"$(expr $(ls *.?sproj) : '\(.*\)\..sproj').dll\"\n" >> /tmp/start.sh
 RUN chmod +x /tmp/start.sh
 
-ARG MAJOR_ARG=0
-ARG MINOR_ARG=0
-ARG BUILD_VERSION_ARG=1
-
-
-ENV MAJOR=${MAJOR_ARG}
-ENV MINOR=${MINOR_ARG}
-ENV BUILD_VERSION=${BUILD_VERSION_ARG}
 COPY paket.dependencies .
 
 RUN  dotnet new tool-manifest
