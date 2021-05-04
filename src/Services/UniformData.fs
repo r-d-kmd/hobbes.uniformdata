@@ -21,12 +21,15 @@ module Data =
                 }
             ]
         }""">
+
     let private cache = Database.Database("uniformcache",Record.Parse,Log.loggerInstance)
     [<Get ("/read/%s")>]
     let read (key : string) =
         match key |> cache.TryGet  with
         Some uniformData ->
-            200, uniformData.JsonValue.ToString()
+            200, System.String.Join(",", uniformData.Data
+                                         |> Array.map(fun v -> v.JsonValue.ToString())
+                 ) |> sprintf "[%s]"
         | None -> 
             404,sprintf "No data found for %s" key
 
