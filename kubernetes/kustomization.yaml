@@ -1,0 +1,6 @@
+commonLabels:
+  app: uniformdata
+
+resources:
+- deployment.yaml
+- service.yaml
